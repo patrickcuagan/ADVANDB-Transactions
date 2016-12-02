@@ -74,5 +74,9 @@ public class Constants {
 			PQUERY_TITLE3, 
 			PQUERY_TITLE4, 
 			PQUERY_TITLE5));
+	
+	public static final String HOST_ASIA_AFRICA = "ASIA_AFRICA";
+	public static final String HOST_EUROPE_AMERICA = "EUROPE_AMERICA";
+	public static final String HOST_ALL = "ALL";
 
 }
