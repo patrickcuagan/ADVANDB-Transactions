@@ -23,11 +23,12 @@ import javax.swing.JOptionPane;
 import network.Client;
 import network.SerializableTrans;
 import network.Server;
+import transactions.ReadTransaction;
 import transactions.Transaction;
-import transactions.Transaction1;
-import transactions.Transaction2;
+import transactions.WriteTransaction;
 import View.MainFrame;
 import Controller.Driver;
+import Model.Constants;
 
 public class Controller {
 
@@ -38,7 +39,7 @@ public class Controller {
     private String name = "";
     private ArrayList<Transaction> transactions;
     private ArrayList<String> queries, scopes;
-    Transaction1 pendingWrite;
+    WriteTransaction pendingWrite;
     Thread client, server;
     private MainFrame main;
 
@@ -55,180 +56,214 @@ public class Controller {
 
         try {
         	for (Transaction transaction : transactionsList){
-        		if (transaction instanceof Transaction2) {
+        		
+        		if (transaction instanceof ReadTransaction) {
         			switch(transaction.getScope()){
-        				case "MARINDUQUE": readMarinduque((Transaction2)transaction);System.out.println("MAR"); break; 
-        				case "PALAWAN": readPalawan((Transaction2)transaction); break;
-        				case "BOTH": readBoth((Transaction2)transaction); break;
+        				case Constants.HOST_ASIA_AFRICA: 	readAsiaAfrica((ReadTransaction)transaction);System.out.println("MAR"); break; 
+        				case Constants.HOST_EUROPE_AMERICA: readEuroAmerica((ReadTransaction)transaction); break;
+        				case Constants.HOST_ALL:			readAllRegions((ReadTransaction)transaction); break;
         			}
         		}
-        		else if (transaction instanceof Transaction1) {
+        		else if (transaction instanceof WriteTransaction) {
 	        			switch(transaction.getScope()){
-	    				case "MARINDUQUE": writeMarinduque((Transaction1)transaction); break; 
-	    				case "PALAWAN": writePalawan((Transaction1)transaction); break;
-	    				case "BOTH": writeBoth((Transaction1)transaction); break;
+	    				case Constants.HOST_ASIA_AFRICA: 	writeAsiaAfrica((WriteTransaction)transaction); break; 
+	    				case Constants.HOST_EUROPE_AMERICA: writeEuroAmerica((WriteTransaction)transaction); break;
+	    				case Constants.HOST_ALL:			writeAllRegions((WriteTransaction)transaction); break;
 	    			}
 	    		}
+        		
+        		
         	}
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
     
-    public void writePalawan(Transaction t) {
-        if (name.equalsIgnoreCase("CENTRAL")) {
-            if (myClient.checkPalawanIfExists()) {
-            	try {
+    public void writeEuroAmerica(Transaction t){
+    	switch(name){
+    		case Constants.HOST_ALL:
+    			//send to euroam + tell euroam to write
+    			if(myClient.checkEuropeAmericaIfExists()){
+    				try{
+	            		partialCommit(t);
+	            		String message = "\"ORDERWRITE\" ";
+	                    byte[] prefix = message.getBytes();
+	                    System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_EURO_AM");
+	                    SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
+	                    byte[] trans = serialize(sertrans);
+	                    byte[] fin = byteConcat(prefix, trans);
+	                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+    				}catch(Exception E){
+    					E.printStackTrace();
+    				}
+    				
+    			}
+    			break;
+    		case Constants.HOST_EUROPE_AMERICA:
+    		case Constants.HOST_ASIA_AFRICA:
+    			//send to all_reg
+    			if(myClient.checkAllRegionsIfExists()){
+                	try {
+                        String message = "\"WRITEREQUEST\" ";
+                        byte[] prefix = message.getBytes();
+                        SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                        byte[] trans = serialize(st);
+                        byte[] fin = byteConcat(prefix, trans);
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }    				
+    			}
+    			break;
+    	}
+    }
+    
+    public void writeAsiaAfrica(Transaction t){
+    	switch(name){
+		case Constants.HOST_ALL:
+			//send to euroam + tell euroam to write
+			if(myClient.checkEuropeAmericaIfExists()){
+				try{
             		partialCommit(t);
             		String message = "\"ORDERWRITE\" ";
                     byte[] prefix = message.getBytes();
-                    System.out.println(((Transaction1)t).isToCommit()+" :INSIDE WRITEPALAWAN");
-                    SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                    System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_ASIA_AFRICA");
+                    SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                     byte[] trans = serialize(sertrans);
                     byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        } else if (name.equalsIgnoreCase("PALAWAN")) {
-            if (myClient.checkCentralIfExists()) {
+                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+				}catch(Exception E){
+					E.printStackTrace();
+				}
+				
+			}
+			break;
+		case Constants.HOST_EUROPE_AMERICA:
+		case Constants.HOST_ASIA_AFRICA:
+			//send to all_reg
+			if(myClient.checkAllRegionsIfExists()){
             	try {
                     String message = "\"WRITEREQUEST\" ";
                     byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                     byte[] trans = serialize(st);
                     byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
+                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
                 } catch (IOException e) {
                     e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        } else if (name.equalsIgnoreCase("MARINDUQUE")) {
-            if (myClient.checkCentralIfExists() && myClient.checkPalawanIfExists()) {
-            	try {
-                    String message = "\"WRITEREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        }
-    }
-
-    public void writeMarinduque(Transaction t) {
-        if (name.equalsIgnoreCase("CENTRAL")) {
-            if (myClient.checkMarinduqueIfExists()) {
-            	try {
-            		partialCommit(t);
-            		String message = "\"ORDERWRITE\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(sertrans);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        } else if (name.equalsIgnoreCase("MARINDUQUE")) {
-            if (myClient.checkCentralIfExists()) {
-            	try {
-                    String message = "\"WRITEREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        } else if (name.equalsIgnoreCase("PALAWAN")) {
-            if (myClient.checkCentralIfExists() && myClient.checkMarinduqueIfExists()) {
-            	try {
-                    String message = "\"WRITEREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } 
-            } else {
-                //return false;
-            }
-        }
-    }
-
-    public void writeBoth(Transaction t) {
-        if (name.equalsIgnoreCase("CENTRAL")) { //jake seo
-            if (myClient.checkMarinduqueIfExists() && myClient.checkPalawanIfExists()) {
-            	try {
-            		pendingWrite = (Transaction1) t;
-            		pendingWrite.beginTransaction();
-            		pendingWrite.start();
-                    String message = "\"WRITEREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                    myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SQLException e){
-                	e.printStackTrace();
+                }    				
+			}
+			break;
+	}
+    }   
+    
+    public void writeAllRegions(Transaction t){
+    	switch(name){
+    		case Constants.HOST_ALL:
+    			//begin writing + send requests
+                if (myClient.checkAsiaAfricaIfExists() && myClient.checkEuropeAmericaIfExists()) {
+                	try {
+                		pendingWrite = (WriteTransaction) t;
+                		pendingWrite.beginTransaction();
+                		pendingWrite.start();
+                        String message = "\"WRITEREQUEST\" ";
+                        byte[] prefix = message.getBytes();
+                        SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                        byte[] trans = serialize(st);
+                        byte[] fin = byteConcat(prefix, trans);
+                        myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
+                        myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e){
+                    	e.printStackTrace();
+                    }
+                } else {
+                    //return false;
                 }
-            } else {
-                //return false;
-            }
-        } else if (name.equalsIgnoreCase("MARINDUQUE")) {
-            if (myClient.checkCentralIfExists() && myClient.checkPalawanIfExists()) {
-            	try {
-            		pendingWrite = (Transaction1) t;
-            		pendingWrite.beginTransaction();
-            		pendingWrite.start();
-                    String message = "\"WRITEREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((Transaction1)t).isToCommit(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (SQLException e){
-                	e.printStackTrace();
+    			break;
+    		case Constants.HOST_EUROPE_AMERICA:
+                if (myClient.checkAllRegionsIfExists() && myClient.checkEuropeAmericaIfExists()) {
+                	try {
+                		pendingWrite = (WriteTransaction) t;
+                		pendingWrite.beginTransaction();
+                		pendingWrite.start();
+                        String message = "\"WRITEREQUEST\" ";
+                        byte[] prefix = message.getBytes();
+                        SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                        byte[] trans = serialize(st);
+                        byte[] fin = byteConcat(prefix, trans);
+                        myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
+                        myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e){
+                    	e.printStackTrace();
+                    }
+                } else {
+                    //return false;
                 }
-            } else {
-                //return false;
-            }
-        } else {
-            if (myClient.checkCentralIfExists() && myClient.checkMarinduqueIfExists()) {
-                //return true;
-            } else {
-                //return false;
-            }
-        }
+    			break;
+    		case Constants.HOST_ASIA_AFRICA:
+    			//do nothing
+    			break;
+    	}
+    }
+    
+    public void readEuroAmerica(ReadTransaction t){
+    	switch(name){
+			case Constants.HOST_ALL:
+				break;
+			case Constants.HOST_EUROPE_AMERICA:
+	            Thread x = new Thread(t);
+	            x.start();
+	            while (true) {
+	                if (t.isDonePopulating()) {
+	                    break;
+	                }
+	            }
+	            printResultSet(t.getResultSet(),t.getName());
+				break;
+			case Constants.HOST_ASIA_AFRICA:
+				break;
+			default:
+				System.out.println("A NEEDED SERVER IS DOWN");
+    	}
     }
 
+    public void readAsiaAfrica(ReadTransaction t){
+    	switch(name){
+			case Constants.HOST_ALL:
+				break;
+			case Constants.HOST_EUROPE_AMERICA:
+				break;
+			case Constants.HOST_ASIA_AFRICA:
+	            Thread x = new Thread(t);
+	            x.start();
+	            while (true) {
+	                if (t.isDonePopulating()) {
+	                    break;
+	                }
+	            }
+	            printResultSet(t.getResultSet(),t.getName());
+				break;
+			default:
+				System.out.println("A NEEDED SERVER IS DOWN");
+    	}
+    }
+    
+    public void readAllRegions(ReadTransaction t){
+    	switch(name){
+		case Constants.HOST_ALL:
+			break;
+		case Constants.HOST_EUROPE_AMERICA:
+			break;
+		case Constants.HOST_ASIA_AFRICA:
+			break;
+    	}
+    }
+    
     public void readPalawan(Transaction2 t) throws SQLException {
         if (name.equalsIgnoreCase("PALAWAN")) {
             Thread x = new Thread(t);
@@ -275,7 +310,7 @@ public class Controller {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else if (myClient.checkPalawanIfExists()){
+            } else if (myClient.checkEuropeAmericaIfExists()){
             	try {
                     String message = "\"READREQUEST\" ";
                     byte[] prefix = message.getBytes();
@@ -383,7 +418,7 @@ public class Controller {
                 }
             } else {
                 if (name.equalsIgnoreCase("MARINDUQUE")) {
-                    if (myClient.checkPalawanIfExists()) {
+                    if (myClient.checkEuropeAmericaIfExists()) {
                         try {
                             t.beginTransaction();
                             t.start();
@@ -436,7 +471,7 @@ public class Controller {
     }
     
     public void partialCommit(Transaction t){
-    	pendingWrite = (Transaction1)t;
+    	pendingWrite = (WriteTransaction)t;
     	try {
     		pendingWrite.beginTransaction();
 		} catch (SQLException e) {

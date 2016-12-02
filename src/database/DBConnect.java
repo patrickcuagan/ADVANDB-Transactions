@@ -26,7 +26,7 @@ public class DBConnect {
     private DBConnect() {
         driverName = "com.mysql.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/";
-        database = "wdi";
+        database = "db_hpq";
         username = "root";
         password = "password";//tempo
     }

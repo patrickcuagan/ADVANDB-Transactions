@@ -49,8 +49,8 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
         //hosts.add(InetAddress.getByName("ip"));
-        names.add("PALAWAN");
-        names.add("CENTRAL");
+        names.add("ALL_REGIONS");
+        names.add("ASIA_AFRICA");
         
         
         //names.add("PALAWAN");
@@ -99,9 +99,9 @@ public class Client implements Runnable{
     	}
     }
     
-    public boolean checkMarinduqueIfExists(){
+    public boolean checkAllRegionsIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("MARINDUQUE")), port);
+    		Socket s = new Socket(hosts.get(names.indexOf("ALL_REGIONS")), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();
@@ -110,9 +110,9 @@ public class Client implements Runnable{
     	return true;
     }
     
-    public boolean checkCentralIfExists(){
+    public boolean checkAsiaAfricaIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("CENTRAL")), port);
+    		Socket s = new Socket(hosts.get(names.indexOf("ASIA_AFRICA")), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();
@@ -121,9 +121,9 @@ public class Client implements Runnable{
     	return true;
     }
     
-    public boolean checkPalawanIfExists(){
+    public boolean checkEuropeAmericaIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("PALAWAN")), port);
+    		Socket s = new Socket(hosts.get(names.indexOf("EUROPE_AMERICA")), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();

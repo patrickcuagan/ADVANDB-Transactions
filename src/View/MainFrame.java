@@ -32,7 +32,7 @@ import javax.swing.border.CompoundBorder;
 
 import Controller.Controller;
 import transactions.Transaction;
-import transactions.Transaction1;
+import transactions.WriteTransaction;
 
 public class MainFrame extends JFrame{
 	private static JTabbedPane tabbedPane;
@@ -154,7 +154,7 @@ public class MainFrame extends JFrame{
 		l.setHorizontalAlignment(SwingConstants.RIGHT);
 		optionsHolder.add(l);
 		
-		isolvlOptions = new JComboBox(new String[] {Transaction1.ISO_READ_COMMITTED_LBL, Transaction1.ISO_READ_UNCOMMITTED_LBL, Transaction1.ISO_REPEATABLE_READ_LBL, Transaction1.ISO_SERIALIZABLE_LBL});
+		isolvlOptions = new JComboBox(new String[] {WriteTransaction.ISO_READ_COMMITTED_LBL, WriteTransaction.ISO_READ_UNCOMMITTED_LBL, WriteTransaction.ISO_REPEATABLE_READ_LBL, WriteTransaction.ISO_SERIALIZABLE_LBL});
 		isolvlOptions.setSelectedIndex(0);
 		optionsHolder.add(isolvlOptions);
 		
@@ -225,14 +225,14 @@ public class MainFrame extends JFrame{
 	
 	public static int getIsoLevel(){
 		switch(isolvlOptions.getSelectedItem().toString()){
-			case Transaction1.ISO_READ_COMMITTED_LBL : 
-				return Transaction1.ISO_READ_COMMITTED;
-			case Transaction1.ISO_READ_UNCOMMITTED_LBL : 
-				return Transaction1.ISO_READ_UNCOMMITTED;
-			case Transaction1.ISO_REPEATABLE_READ_LBL : 
-				return Transaction1.ISO_REPEATABLE_READ;
-			case Transaction1.ISO_SERIALIZABLE_LBL : 
-				return Transaction1.ISO_SERIALIZABLE;
+			case WriteTransaction.ISO_READ_COMMITTED_LBL : 
+				return WriteTransaction.ISO_READ_COMMITTED;
+			case WriteTransaction.ISO_READ_UNCOMMITTED_LBL : 
+				return WriteTransaction.ISO_READ_UNCOMMITTED;
+			case WriteTransaction.ISO_REPEATABLE_READ_LBL : 
+				return WriteTransaction.ISO_REPEATABLE_READ;
+			case WriteTransaction.ISO_SERIALIZABLE_LBL : 
+				return WriteTransaction.ISO_SERIALIZABLE;
 			default:
 				return -1;
 		}
