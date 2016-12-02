@@ -34,9 +34,10 @@ import javax.swing.table.DefaultTableModel;
 import Model.Column;
 import Model.ComboBoxConstants;
 import Model.Constants;
+import transactions.ReadTransaction;
 import transactions.Transaction;
-import transactions.Transaction1;
-import transactions.Transaction2;
+import transactions.WriteTransaction;
+import transactions.ReadTransaction;;
 
 public class TransactionPanel extends JPanel{
 	
@@ -51,7 +52,7 @@ public class TransactionPanel extends JPanel{
 	private JComboBox areaOptions;
 	private JComboBox acOptions;
 	private ButtonGroup group;
-	private ArrayList<String> queriesList = Constants.MARINDUQUE_Q_TITLES;
+	private ArrayList<String> queriesList = Constants.ASIA_AFRICA_Q_TITLES;
 	private JPanel resultsPane;
 	private static final int CUST_HEIGHT = 110;
 	
@@ -236,7 +237,7 @@ public class TransactionPanel extends JPanel{
 		la.setHorizontalAlignment(SwingConstants.RIGHT);
 		addBtnContainer.add(la, new Float(1));
 		
-		areaOptions = new JComboBox(new String[] {Constants.AREA_MARINDUQUE, Constants.AREA_PALAWAN, Constants.AREA_BOTH});
+		areaOptions = new JComboBox(new String[] {Constants.REGION_ASIA_AFRICA, Constants.REGION_EUROPE_AMERICA, Constants.REGION_BOTH});
 		areaOptions.addActionListener(new ButtonListener());
 		areaOptions.setSelectedIndex(0);
 		addBtnContainer.add(areaOptions, new Float(1.5));
@@ -319,25 +320,25 @@ public class TransactionPanel extends JPanel{
         for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
             
-            if (this.queriesList.equals(Constants.PALAWAN_Q_TITLES)){
+            if (this.queriesList.equals(Constants.EUROPE_AMERICA_Q_TITLES)){
 	            if (button.isSelected()) {
 	            	switch(button.getText()){
-	            		case Constants.PQUERY_TITLE1: return Constants.PQUERY_1;
-	            		case Constants.PQUERY_TITLE2: return Constants.PQUERY_2;
-	            		case Constants.PQUERY_TITLE3: return Constants.PQUERY_3;
-	            		case Constants.PQUERY_TITLE4: return Constants.PQUERY_4;
-	            		case Constants.PQUERY_TITLE5: return Constants.PQUERY_5;
+	            	case Constants.EUROPE_AMERICA_TITLE1: return Constants.EUROPE_AMERICA_QUERY1;
+	            	case Constants.EAQUERY_TITLE2: return Constants.EAQUERY_2;                   
+	            	case Constants.EAQUERY_TITLE3: return Constants.EAQUERY_3;                   
+	            	case Constants.EAQUERY_TITLE4: return Constants.EAQUERY_4;                   
+	            	case Constants.EAQUERY_TITLE5: return Constants.EAQUERY_5;    
 	            	}
 	            }
             }
-            else if (this.queriesList.equals(Constants.MARINDUQUE_Q_TITLES)){
+            else if (this.queriesList.equals(Constants.ASIA_AFRICA_Q_TITLES)){
 	            if (button.isSelected()) {
-	            	switch(button.getText()){
-	            		case Constants.MQUERY_TITLE1: return Constants.MQUERY_1;
-	            		case Constants.MQUERY_TITLE2: return Constants.MQUERY_2;
-	            		case Constants.MQUERY_TITLE3: return Constants.MQUERY_3;
-	            		case Constants.MQUERY_TITLE4: return Constants.MQUERY_4;
-	            		case Constants.MQUERY_TITLE5: return Constants.MQUERY_5;
+	            	switch(button.getText()){               
+            		case Constants.ASIA_AFRICA_TITLE1: return Constants.ASIA_AFRICA_QUERY1;
+            		case Constants.AAQUERY_TITLE2: return Constants.AAQUERY_2;
+            		case Constants.AAQUERY_TITLE3: return Constants.AAQUERY_3;
+            		case Constants.AAQUERY_TITLE4: return Constants.AAQUERY_4;
+            		case Constants.AAQUERY_TITLE5: return Constants.AAQUERY_5;
 	            	}
 	            }
             }
@@ -444,11 +445,11 @@ public class TransactionPanel extends JPanel{
 		String query = getQuery();
 		Transaction transaction = null;
 		if (query.contains("UPDATE") || query.contains("DELETE")){
-			transaction = new Transaction1(query, getArea(), getBooleanAbort(), MainFrame.getIsoLevel());
+			transaction = new WriteTransaction(query, getArea(), getBooleanAbort(), MainFrame.getIsoLevel());
 			transaction.setName(this.getName());
 		}
 		else if (query.contains("SELECT")){
-			transaction = new Transaction2(query, getArea(), MainFrame.getIsoLevel() );
+			transaction = new ReadTransaction(query, getArea(), MainFrame.getIsoLevel() );
 			transaction.setName(this.getName());
 		}
 		return transaction;
@@ -473,11 +474,11 @@ public class TransactionPanel extends JPanel{
 	    	}
 	    	else if (e.getSource() instanceof JComboBox){
 	    		switch(((JComboBox)e.getSource()).getSelectedItem().toString()){
-	    			case Constants.AREA_MARINDUQUE: 
-	    				queriesList = Constants.MARINDUQUE_Q_TITLES; 
+	    			case Constants.REGION_ASIA_AFRICA: 
+	    				queriesList = Constants.ASIA_AFRICA_Q_TITLES; 
 	    				break;
-	    			case Constants.AREA_PALAWAN: 	
-	    				queriesList = Constants.PALAWAN_Q_TITLES; 
+	    			case Constants.REGION_EUROPE_AMERICA: 	
+	    				queriesList = Constants.EUROPE_AMERICA_Q_TITLES; 
 	    				break;
 	    			default: 
 	    				queriesList = Constants.BOTH_Q_TITLES;

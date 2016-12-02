@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import Controller.Controller;
+import Model.Constants;
 import View.MainFrame;
 import transactions.Transaction;
-import transactions.Transaction1;
-import transactions.Transaction2;
+import transactions.WriteTransaction;
+import transactions.ReadTransaction;
 
 import com.sun.rowset.CachedRowSetImpl;
 
@@ -19,7 +20,7 @@ public class Driver {
 		
 		Controller runner = new Controller();
 		boolean isLocal = true;
-		runner.setName("MARINDUQUE");
+		runner.setName(Constants.HOST_ALL);
 		runner.startServer(PORT);
 		runner.startClient();
 		Scanner sc = new Scanner(System.in);
