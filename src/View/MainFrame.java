@@ -213,10 +213,8 @@ public class MainFrame extends JFrame{
 			// send needed info to controller
 			ArrayList<Transaction> transactions = new ArrayList<Transaction>();
 			for (String tablename : transNames ) {
-				if (!tablename.equalsIgnoreCase("t2")){
-					if ((findTransPanel(tablename)).getBooleanAbort())
-						transactions.add((findTransPanel(tablename)).getTransactionDetails());
-				}
+				if ((findTransPanel(tablename)).getBooleanAbort())
+					transactions.add((findTransPanel(tablename)).getTransactionDetails());
 			}
 			this.c.executeTransactions(transactions);
 			//this.c.executeTransactions(query, scope, query2, scope2, isGlobal);
