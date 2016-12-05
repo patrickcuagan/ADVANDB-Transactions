@@ -37,9 +37,9 @@ public class Constants {
 	public static final String BQUERY_1 = "SELECT count(*) from wdi.countryregion ";
 	
 	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from asia_africa.countryregion ";
-	public static final String AAQUERY_2 = "UPDATE hpq_death SET mdeadage = mdeadage + 10  ";
-	public static final String AAQUERY_3 = "UPDATE hpq_death SET mdeadage = mdeadage + 20  ";
-	public static final String AAQUERY_4 = "UPDATE hpq_death SET mdeadage = mdeadage + 30  ";
+	public static final String AAQUERY_2 = "UPDATE asia_africa.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String AAQUERY_3 = "UPDATE asia_africa.databyyear SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String AAQUERY_4 = "UPDATE asia_africa.databyyear SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND ";
 	public static final String AAQUERY_5 = "DELETE FROM hpq_death";
 	/*public static final String MQUERY_6 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
 	public static final String MQUERY_7 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
@@ -48,9 +48,9 @@ public class Constants {
 	public static final String MQUERY_0 = "UPDATE hpq_death SET mdeadage = mdeadage + 50 ";*/
 	
 	public static final String EUROPE_AMERICA_QUERY1 = "SELECT * from europe_america.countryregion ";
-	public static final String EAQUERY_2 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
-	public static final String EAQUERY_3 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
-	public static final String EAQUERY_4 = "UPDATE hpq_death SET mdeadage = mdeadage + 30 ";
+	public static final String EAQUERY_2 = "UPDATE europe_america.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String EAQUERY_3 = "UPDATE europe_america.databyyear SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String EAQUERY_4 = "UPDATE europe_america.databyyear SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND ";
 	public static final String EAQUERY_5 = "DELETE FROM hpq_death";	
 	/*public static final String PQUERY_6 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
 	public static final String PQUERY_7 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
