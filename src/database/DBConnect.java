@@ -12,6 +12,7 @@ public class DBConnect {
     private String driverName;
     private String url;
     private String database;
+    private String param;
     private String databasereplica;
     private String username;
     private String password;
@@ -28,10 +29,11 @@ public class DBConnect {
     private DBConnect() {
         driverName = "com.mysql.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/";
-        database = "europe_america";
+        databasereplica = "europe_america";
+        param = "?useSSL=false";
         database = "wdi";
         username = "root";
-        password = "password";//tempo
+        password = "root";//tempo
     }
      
     /**
@@ -71,7 +73,7 @@ public class DBConnect {
 
         try {
             return DriverManager.getConnection(instance.getUrl()
-                    + instance.getDatabase(),
+                    + instance.getDatabase() + instance.getParam(),
                     instance.getUsername(),
                     instance.getPassword());
         } catch (SQLException se) {
@@ -141,6 +143,10 @@ public class DBConnect {
         return password;
     }
 
+    private String getParam() {
+    	return param;
+    }
+    
     /**
      * returns whether password is correct or not
      *

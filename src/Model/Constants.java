@@ -34,7 +34,7 @@ public class Constants {
 	public static final String PQUERY_TITLE9 = "Palawan Increment 40";
 	public static final String PQUERY_TITLE0 = "Palawan Increment 50";*/
 	
-	public static final String BQUERY_1 = "SELECT count(*) from wdi.countryregion ";
+	public static final String BQUERY_1 = "SELECT count(*) from countryregion ";
 	
 	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from asia_africa.countryregion ";
 	public static final String AAQUERY_2 = "UPDATE asia_africa.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
