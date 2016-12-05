@@ -10,14 +10,14 @@ public class Constants {
 	public static final String REGION_BOTH = "ALL";
 	
 	public static final String BQUERY_TITLE1 = "Both Read Table";
-	public static final String BQUERY_TITLE2 = "Both POPULATION +10 ABW YR2000";
-	public static final String BQUERY_TITLE3 = "Both POPULATION +20 ABW YR2000";
-	public static final String BQUERY_TITLE4 = "Both POPULATION -100 ABW YR2000";
+	public static final String BQUERY_TITLE2 = "Both TOT.POP +10 ABW YR2000";
+	public static final String BQUERY_TITLE3 = "Both TOT.POP +20 ABW YR2000";
+	public static final String BQUERY_TITLE4 = "Both TOT.POP -100 ABW YR2000";
 	
 	public static final String ASIA_AFRICA_TITLE1 = "ASIA_AFRICA Read Table";
-	public static final String AAQUERY_TITLE2 = "ASIA_AFRICA Update Table 1";
-	public static final String AAQUERY_TITLE3 = "ASIA_AFRICA Update Table 2";
-	public static final String AAQUERY_TITLE4 = "ASIA_AFRICA Update Table 3";
+	public static final String AAQUERY_TITLE2 = "ASIA_AFRICA TOP.POP +10 AFG YR2000";
+	public static final String AAQUERY_TITLE3 = "ASIA_AFRICA TOT.POP +20 AFG YR2000";
+	public static final String AAQUERY_TITLE4 = "ASIA_AFRICA TOT.POP -100 AFG YR2000";
 	public static final String AAQUERY_TITLE5 = "ASIA_AFRICA Delete";
 	/*public static final String MQUERY_TITLE6 = "Marinduque Increment 10";
 	public static final String MQUERY_TITLE7 = "Marinduque Increment 20";
@@ -43,9 +43,9 @@ public class Constants {
 	public static final String BQUERY_4 = "UPDATE `wdi`.`databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
 	
 	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from asia_africa.countryregion ";
-	public static final String AAQUERY_2 = "UPDATE asia_africa.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
-	public static final String AAQUERY_3 = "UPDATE asia_africa.databyyear SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND ";
-	public static final String AAQUERY_4 = "UPDATE asia_africa.databyyear SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String AAQUERY_2 = "UPDATE `asia_africa`.`databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
+	public static final String AAQUERY_3 = "UPDATE `asia_africa`.`databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
+	public static final String AAQUERY_4 = "UPDATE `asia_africa`.`databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
 	public static final String AAQUERY_5 = "DELETE FROM hpq_death";
 	/*public static final String MQUERY_6 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
 	public static final String MQUERY_7 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
