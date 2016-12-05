@@ -117,7 +117,7 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 	public void start() {
 		try{
 			String lock="";
-			lock = "LOCK TABLES hpq_death WRITE;";
+			lock = "LOCK TABLES databyyear WRITE;";
 			
 			stmt.execute(lock);
 			String SQL = query;

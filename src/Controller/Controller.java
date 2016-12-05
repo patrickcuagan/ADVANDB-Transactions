@@ -162,7 +162,7 @@ public class Controller {
     	switch(name){
     		case Constants.HOST_ALL:
     			//begin writing + send requests
-                if (myClient.checkAsiaAfricaIfExists() && myClient.checkEuropeAmericaIfExists()) {
+//                if (myClient.checkAsiaAfricaIfExists() && myClient.checkEuropeAmericaIfExists()) {
                 	try {
                 		pendingWrite = (WriteTransaction) t;
                 		pendingWrite.beginTransaction();
@@ -172,16 +172,16 @@ public class Controller {
                         SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                         byte[] trans = serialize(st);
                         byte[] fin = byteConcat(prefix, trans);
-                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
-                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+//                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+//                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e){
                     	e.printStackTrace();
                     }
-                } else {
-                    //return false;
-                }
+//                } else {
+//                    //return false;
+//                }
     			break;
     		case Constants.HOST_EUROPE_AMERICA:
                 if (myClient.checkAllRegionsIfExists() && myClient.checkAsiaAfricaIfExists()) {

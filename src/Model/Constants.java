@@ -10,6 +10,7 @@ public class Constants {
 	public static final String REGION_BOTH = "ALL";
 	
 	public static final String BQUERY_TITLE1 = "Both Read Table";
+	public static final String BQUERY_TITLE2 = "Both Update Population Year 2000 for ABW";
 	
 	public static final String ASIA_AFRICA_TITLE1 = "ASIA_AFRICA Read Table";
 	public static final String AAQUERY_TITLE2 = "ASIA_AFRICA Update Table 1";
@@ -35,6 +36,7 @@ public class Constants {
 	public static final String PQUERY_TITLE0 = "Palawan Increment 50";*/
 	
 	public static final String BQUERY_1 = "SELECT count(*) from countryregion ";
+	public static final String BQUERY_2 = "UPDATE `wdi`.`databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
 	
 	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from asia_africa.countryregion ";
 	public static final String AAQUERY_2 = "UPDATE asia_africa.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
@@ -59,7 +61,8 @@ public class Constants {
 	public static final String PQUERY_0 = "UPDATE hpq_death SET mdeadage = mdeadage + 50 ";*/
 	
 	public static final ArrayList<String> BOTH_Q_TITLES =  new ArrayList<String>(Arrays.asList(
-			BQUERY_TITLE1));
+			BQUERY_TITLE1,
+			BQUERY_TITLE2));
 	
 	public static final ArrayList<String> ASIA_AFRICA_Q_TITLES =  new ArrayList<String>(Arrays.asList(
 			ASIA_AFRICA_TITLE1, 

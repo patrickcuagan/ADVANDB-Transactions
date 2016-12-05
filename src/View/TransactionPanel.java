@@ -346,6 +346,7 @@ public class TransactionPanel extends JPanel{
 	            if (button.isSelected()) {
 	            	switch(button.getText()){
 	            		case Constants.BQUERY_TITLE1: return Constants.BQUERY_1;
+	            		case Constants.BQUERY_TITLE2: return Constants.BQUERY_2;
 	            	}
 	            }
             }
