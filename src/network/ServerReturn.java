@@ -45,6 +45,7 @@ public class ServerReturn{
     	extractByte(X);
     	if(current!=-1){
     		extractHeader(mybytearray);
+    		System.out.println("message: "+messageType);
     		try{
 	        	if(messageType.contains("\"READREQUEST\"")){
 	        		parent.printMessage("IN READREQUEST");
@@ -192,12 +193,29 @@ public class ServerReturn{
 	            	t.beginTransaction();
 	            	t.start();
 	            	t.end();
+	            	
+	            	switch(parent.getName()){
+	            		case Constants.HOST_EUROPE_AMERICA:
+	            			break;
+	            		case Constants.HOST_ALL:
+	            			break;
+	            		case Constants.HOST_ASIA_AFRICA:
+	            			break;
+	            	}
+	            	
 	        		String msg = "\"DONECOMMIT\" ";
 	        		parent.sendToHost(msg.getBytes(), X.getInetAddress());
 	        	}else if(messageType.contains("\"ORDERWRITE\"")){
 	        		SerializableTrans writetrans = (SerializableTrans) deserialize(mybytearray);
 	        		WriteTransaction t = new WriteTransaction(writetrans.getQuery(),writetrans.getScope(), writetrans.isToCommit(), writetrans.getIso_level());
 	            	t.setIsolationLevel(writetrans.getIso_level());
+	            	
+	            	if(messageType.contains("\"REPLICATE\"")){
+	            		t.setConnectionReplica();
+	            	}else if(messageType.contains("\"ORIGINAL\"")){
+	            		t.setConnection();
+	            	}
+	            	
 	        		t.beginTransaction();
 	            	t.start();
 	            	t.end();

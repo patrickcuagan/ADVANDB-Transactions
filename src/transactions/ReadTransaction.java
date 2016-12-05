@@ -175,5 +175,18 @@ public class ReadTransaction implements Transaction, Serializable, Runnable{
 	}
 
 
+	@Override
+	public void setConnection() {
+		// TODO Auto-generated method stub
+		con = DBConnect.getConnection();
+		
+	}
+
+	@Override
+	public void setConnectionReplica() {
+		// TODO Auto-generated method stub
+		con = DBConnect.getConnectionReplica();
+		
+	}
 
 }

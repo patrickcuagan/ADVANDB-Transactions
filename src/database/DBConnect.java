@@ -7,10 +7,12 @@ import java.sql.SQLException;
 
 public class DBConnect {
     private static DBConnect instance = null;
+    private static DBConnect instancerep = null;
 
     private String driverName;
     private String url;
     private String database;
+    private String databasereplica;
     private String username;
     private String password;
 
@@ -26,7 +28,8 @@ public class DBConnect {
     private DBConnect() {
         driverName = "com.mysql.jdbc.Driver";
         url = "jdbc:mysql://localhost:3306/";
-        database = "db_hpq";
+        database = "europe_america";
+        database = "wdi";
         username = "root";
         password = "password";//tempo
     }
@@ -43,7 +46,19 @@ public class DBConnect {
 
         return instance;
     }
+    
+   /**
+    * returns an instance of the Database Connection
+    *
+    * @return instance of the Database Connection
+    */
+   public static DBConnect getInstanceReplica() {
+       if (instancerep == null) {
+           instancerep = new DBConnect();
+       }
 
+       return instancerep;
+   }
     /**
      * returns a connection to database
      *
@@ -67,6 +82,27 @@ public class DBConnect {
     }
 
     /**
+     * returns a connection to database replica
+     *
+     * @return connection to database replica
+     */
+    public static Connection getConnectionReplica() {
+        if (instancerep == null) {
+            instancerep = new DBConnect();
+        }
+
+        try {
+            return DriverManager.getConnection(instancerep.getUrl()
+                    + instancerep.getDatabaseReplica(),
+                    instancerep.getUsername(),
+                    instancerep.getPassword());
+        } catch (SQLException se) {
+            se.printStackTrace();
+        }
+
+        return null;
+    }
+    /**
      * returns database URL
      *
      * @return database URL
@@ -84,6 +120,14 @@ public class DBConnect {
         return database;
     }
 
+    /**
+     * returns database name
+     *
+     * @return database name
+     */
+    public String getDatabaseReplica() {
+        return databasereplica;
+    }
     /**
      * returns username
      *

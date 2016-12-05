@@ -44,4 +44,7 @@ public interface Transaction {
 	
 	public String getName();
 	
+	public void setConnection();
+	public void setConnectionReplica();
+	
 }

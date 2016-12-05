@@ -174,5 +174,19 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 		return name;
 	}
 
+	@Override
+	public void setConnection() {
+		// TODO Auto-generated method stub
+		con = DBConnect.getConnection();
+		
+	}
+
+	@Override
+	public void setConnectionReplica() {
+		// TODO Auto-generated method stub
+		con = DBConnect.getConnectionReplica();
+		
+	}
+
 	
 }
