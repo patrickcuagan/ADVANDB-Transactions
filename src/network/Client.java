@@ -34,16 +34,10 @@ public class Client implements Runnable{
         
         
         try {
-        	//hosts.add(InetAddress.getByName("192.168.1.131"));
-			//hosts.add(InetAddress.getByName("192.168.1.6"));
-			//hosts.add(InetAddress.getByName("192.168.1.112"));
         	
         	hosts.add(InetAddress.getByName("192.168.1.148"));
         	hosts.add(InetAddress.getByName("192.168.1.105"));
         	
-        	/*hosts.add(InetAddress.getByName("10.100.216.241"));
-        	hosts.add(InetAddress.getByName("10.100.202.3"));*/
-			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

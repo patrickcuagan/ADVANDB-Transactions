@@ -1,25 +1,12 @@
 package Controller;
 
 import com.sun.rowset.CachedRowSetImpl;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-
-import javax.swing.JOptionPane;
-
 import network.Client;
 import network.SerializableTrans;
 import network.Server;
@@ -122,16 +109,19 @@ public class Controller {
     public void writeAsiaAfrica(Transaction t){
     	switch(name){
 		case Constants.HOST_ALL:
-			//send to euroam + tell euroam to write
-			if(myClient.checkEuropeAmericaIfExists()){
+
+			if(myClient.checkAsiaAfricaIfExists()){
 				try{
             		partialCommit(t);
-            		String message = "\"ORDERWRITE\" ";
+            		String message = "\"ORDERWRITE\" \"ORIGINAL\"";
                     byte[] prefix = message.getBytes();
                     System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_ASIA_AFRICA");
                     SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                     byte[] trans = serialize(sertrans);
                     byte[] fin = byteConcat(prefix, trans);
+
+
+                    
                     myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
 				}catch(Exception E){
 					E.printStackTrace();
@@ -150,6 +140,16 @@ public class Controller {
                     byte[] trans = serialize(st);
                     byte[] fin = byteConcat(prefix, trans);
                     myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
+                    
+//            		partialCommit(t);
+            		message = "\"ORDERWRITE\" \"REPLICATE\"";
+                    prefix = message.getBytes();
+                    System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_ASIA_AFRICA");
+                    SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
+                    trans = serialize(sertrans);
+                    byte[] fin2 = byteConcat(prefix, trans);
+                    myClient.SEND(fin2, myClient.getAddressFromName(Constants.HOST_ALL));
+                    
                 } catch (IOException e) {
                     e.printStackTrace();
                 }    				
@@ -172,8 +172,8 @@ public class Controller {
                         SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                         byte[] trans = serialize(st);
                         byte[] fin = byteConcat(prefix, trans);
-                        myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                        myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e){
@@ -184,7 +184,7 @@ public class Controller {
                 }
     			break;
     		case Constants.HOST_EUROPE_AMERICA:
-                if (myClient.checkAllRegionsIfExists() && myClient.checkEuropeAmericaIfExists()) {
+                if (myClient.checkAllRegionsIfExists() && myClient.checkAsiaAfricaIfExists()) {
                 	try {
                 		pendingWrite = (WriteTransaction) t;
                 		pendingWrite.beginTransaction();
@@ -194,8 +194,8 @@ public class Controller {
                         SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                         byte[] trans = serialize(st);
                         byte[] fin = byteConcat(prefix, trans);
-                        myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                        myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e){
@@ -212,11 +212,28 @@ public class Controller {
     }
     
     public void readEuroAmerica(ReadTransaction t){
+    	Thread x;
+    	String editQuery;
     	switch(name){
 			case Constants.HOST_ALL:
+	        	editQuery="";
+	        	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
+	        		editQuery= t.getQuery()+" AND region IN ('Europe & Central Asia', 'Latin America & Caribbean', 'North America') ";
+	        	}else{
+	        		editQuery= t.getQuery()+" WHERE region IN ('Europe & Central Asia', 'Latin America & Caribbean', 'North America') ";
+	        	}
+	        	t.setQuery(editQuery);
+	            x = new Thread(t);
+	            x.start();
+	            while (true) {
+	                if (t.isDonePopulating()) {
+	                    break;
+	                }
+	            }
+	            printResultSet(t.getResultSet(),t.getName());
 				break;
 			case Constants.HOST_EUROPE_AMERICA:
-	            Thread x = new Thread(t);
+	            x = new Thread(t);
 	            x.start();
 	            while (true) {
 	                if (t.isDonePopulating()) {
@@ -226,6 +243,38 @@ public class Controller {
 	            printResultSet(t.getResultSet(),t.getName());
 				break;
 			case Constants.HOST_ASIA_AFRICA:
+				if (myClient.checkAllRegionsIfExists()) {
+	                try {
+	                	editQuery="";
+	                	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
+	    	        		editQuery= t.getQuery()+" AND region IN ('Europe & Central Asia', 'Latin America & Caribbean', 'North America') ";
+	    	        	}else{
+	    	        		editQuery= t.getQuery()+" WHERE region IN ('Europe & Central Asia', 'Latin America & Caribbean', 'North America') ";
+	                	}
+	                	t.setQuery(editQuery);
+	                	
+	                    String message = "\"READREQUEST\" ";
+	                    byte[] prefix = message.getBytes();
+	                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
+	                    byte[] trans = serialize(st);
+	                    byte[] fin = byteConcat(prefix, trans);
+	                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            } else if (myClient.checkEuropeAmericaIfExists()){
+	            	try {
+	                    String message = "\"READREQUEST\" ";
+	                    byte[] prefix = message.getBytes();
+	                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
+	                    byte[] trans = serialize(st);
+	                    byte[] fin = byteConcat(prefix, trans);
+	                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
 				break;
 			default:
 				System.out.println("A NEEDED SERVER IS DOWN");
@@ -233,13 +282,62 @@ public class Controller {
     }
 
     public void readAsiaAfrica(ReadTransaction t){
+    	String editQuery;
+    	Thread x;
     	switch(name){
 			case Constants.HOST_ALL:
+	        	editQuery="";
+	        	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
+	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	        	}else{
+	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	        	}
+	        	t.setQuery(editQuery);
+	            x = new Thread(t);
+	            x.start();
+	            while (true) {
+	                if (t.isDonePopulating()) {
+	                    break;
+	                }
+	            }
+	            printResultSet(t.getResultSet(),t.getName());
 				break;
 			case Constants.HOST_EUROPE_AMERICA:
+				if (myClient.checkAllRegionsIfExists()) {
+	                try {
+	                	editQuery="";
+	                	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
+	    	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	    	        	}else{
+	    	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	                	}
+	                	t.setQuery(editQuery);
+	                	
+	                    String message = "\"READREQUEST\" ";
+	                    byte[] prefix = message.getBytes();
+	                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
+	                    byte[] trans = serialize(st);
+	                    byte[] fin = byteConcat(prefix, trans);
+	                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            } else if (myClient.checkAsiaAfricaIfExists()){
+	            	try {
+	                    String message = "\"READREQUEST\" ";
+	                    byte[] prefix = message.getBytes();
+	                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
+	                    byte[] trans = serialize(st);
+	                    byte[] fin = byteConcat(prefix, trans);
+	                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                }
+	            }
 				break;
 			case Constants.HOST_ASIA_AFRICA:
-	            Thread x = new Thread(t);
+	            x = new Thread(t);
 	            x.start();
 	            while (true) {
 	                if (t.isDonePopulating()) {
@@ -254,148 +352,10 @@ public class Controller {
     }
     
     public void readAllRegions(ReadTransaction t){
-    	switch(name){
-		case Constants.HOST_ALL:
-			break;
-		case Constants.HOST_EUROPE_AMERICA:
-			break;
-		case Constants.HOST_ASIA_AFRICA:
-			break;
-    	}
-    }
-    
-    public void readPalawan(Transaction2 t) throws SQLException {
-        if (name.equalsIgnoreCase("PALAWAN")) {
-            Thread x = new Thread(t);
-            x.start();
-            while (true) {
-                if (t.isDonePopulating()) {
-                    break;
-                }
-            }
-            printResultSet(t.getResultSet(),t.getName());
-        } else if (name.equalsIgnoreCase("CENTRAL")) {
-        	String editQuery="";
-        	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-        		editQuery= t.getQuery()+" AND location='Palawan' ";
-        	}else{
-        		editQuery= t.getQuery()+" WHERE location='Palawan' ";
-        	}
-        	t.setQuery(editQuery);
-            Thread x = new Thread(t);
-            x.start();
-            while (true) {
-                if (t.isDonePopulating()) {
-                    break;
-                }
-            }
-            printResultSet(t.getResultSet(),t.getName());
-        } else if (name.equalsIgnoreCase("MARINDUQUE")) {
-            if (myClient.checkCentralIfExists()) {
-                try {
-                	String editQuery="";
-                	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-                		editQuery= t.getQuery()+" AND location='Palawan' ";
-                	}else{
-                		editQuery= t.getQuery()+" WHERE location='Palawan' ";
-                	}
-                	t.setQuery(editQuery);
-                	
-                    String message = "\"READREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (myClient.checkEuropeAmericaIfExists()){
-            	try {
-                    String message = "\"READREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else{
-            	Driver.printMessage("A NEEDED SERVER IS DOWN");
-            }
-        }
-    }
-
-    public void readMarinduque(Transaction2 t) throws SQLException {
-        if (name.equalsIgnoreCase("MARINDUQUE")) {
-            Thread x = new Thread(t);
-            x.start();
-            while (true) {
-                if (t.isDonePopulating()) {
-                    break;
-                }
-            }
-            printResultSet(t.getResultSet(),t.getName());
-        } else if (name.equalsIgnoreCase("CENTRAL")) {
-        	String editQuery="";
-        	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-        		editQuery= t.getQuery()+" AND location='Marinduque' ";
-        	}else{
-        		editQuery= t.getQuery()+" WHERE location='Marinduque' ";
-        	}
-        	t.setQuery(editQuery);
-            Thread x = new Thread(t);
-            x.start();
-            while (true) {
-                if (t.isDonePopulating()) {
-                    break;
-                }
-            }
-            printResultSet(t.getResultSet(),t.getName());
-        } else if (name.equalsIgnoreCase("PALAWAN")) {
-            if (myClient.checkCentralIfExists()) {
-                try {
-                	String editQuery="";
-                	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-                		editQuery= t.getQuery()+" AND location='Marinduque' ";
-                	}else{
-                		editQuery= t.getQuery()+" WHERE location='Marinduque' ";
-                	}
-                	t.setQuery(editQuery);
-                    String message = "\"READREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }else if (myClient.checkMarinduqueIfExists()) { 
-            	try {
-                    String message = "\"READREQUEST\" ";
-                    byte[] prefix = message.getBytes();
-                    SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
-                    byte[] trans = serialize(st);
-                    byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                Driver.printMessage("A NEEDED SERVER IS DOWN");
-            }
-        }
-    }
-
-    public void readBoth(Transaction2 t) throws SQLException {
-        if (name.equalsIgnoreCase("CENTRAL")) {
-            Thread x = new Thread(t);
+    	Thread x;
+    	
+        if (name.equalsIgnoreCase(Constants.HOST_ALL)) {
+            x = new Thread(t);
             x.start();
             while (true) {
                 if (t.isDonePopulating()) {
@@ -404,9 +364,9 @@ public class Controller {
             }
             printResultSet(t.getResultSet(),t.getName());
         } else {
-            if (myClient.checkCentralIfExists()) {
+        	if(myClient.checkAllRegionsIfExists()){
                 try {
-                    Driver.printMessage("CENTRAL EXISTS");
+                    Driver.printMessage("ALL_REGIONS EXISTS");
                     String message = "\"READREQUEST\" ";
                     byte[] prefix = message.getBytes();
                     SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
@@ -416,53 +376,68 @@ public class Controller {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                if (name.equalsIgnoreCase("MARINDUQUE")) {
-                    if (myClient.checkEuropeAmericaIfExists()) {
-                        try {
-                            t.beginTransaction();
-                            t.start();
-                            cs = t.getResultSet();
+        		
+        	}
+        	else{
+		    	switch(name){
+					case Constants.HOST_EUROPE_AMERICA:
+	                    if (myClient.checkAsiaAfricaIfExists()) {
+	                        try {
+	                            
+								t.beginTransaction();
+								
+	                            t.start();
+	                            cs = t.getResultSet();
 
-                            Driver.printMessage("CENTRAL EXISTS");
-                            String message = "\"READREQUESTCOMBINE\" ";
-                            byte[] prefix = message.getBytes();
-                            SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(),t.getIsolationLevel(), t.getName());
-                            byte[] trans = serialize(st);
-                            byte[] fin = byteConcat(prefix, trans);
-                            myClient.SEND(fin, myClient.getAddressFromName("PALAWAN"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Driver.printMessage("A NEEDED SERVER IS DOWN");
-                    }
-                } else {
-                    if (myClient.checkMarinduqueIfExists()) {
-                        try {
-                            t.beginTransaction();
-                            t.start();
-                            cs = t.getResultSet();
+	                            Driver.printMessage("ASAF EXISTS");
+	                            String message = "\"READREQUESTCOMBINE\" ";
+	                            byte[] prefix = message.getBytes();
+	                            SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(),t.getIsolationLevel(), t.getName());
+	                            byte[] trans = serialize(st);
+	                            byte[] fin = byteConcat(prefix, trans);
+	                            myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+	                            
+	                        } catch (IOException e) {
+	                            e.printStackTrace();
+	                        } catch (SQLException e) {
+								e.printStackTrace();
+							}
+	                    } else {
+	                        Driver.printMessage("A NEEDED SERVER IS DOWN");
+	                    }
+						
+						break;
+					case Constants.HOST_ASIA_AFRICA:
+	                    if (myClient.checkEuropeAmericaIfExists()) {
+	                        try {
+	                            
+								t.beginTransaction();
+								
+	                            t.start();
+	                            cs = t.getResultSet();
 
-                            Driver.printMessage("CENTRAL EXISTS");
-                            String message = "\"READREQUESTCOMBINE\" ";
-                            byte[] prefix = message.getBytes();
-                            SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
-                            byte[] trans = serialize(st);
-                            byte[] fin = byteConcat(prefix, trans);
-                            myClient.SEND(fin, myClient.getAddressFromName("MARINDUQUE"));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Driver.printMessage("A NEEDED SERVER IS DOWN");
-                    }
-                }
-            }
+	                            Driver.printMessage("EUAM EXISTS");
+	                            String message = "\"READREQUESTCOMBINE\" ";
+	                            byte[] prefix = message.getBytes();
+	                            SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(),t.getIsolationLevel(), t.getName());
+	                            byte[] trans = serialize(st);
+	                            byte[] fin = byteConcat(prefix, trans);
+	                            myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+	                            
+	                        } catch (IOException e) {
+	                            e.printStackTrace();
+	                        } catch (SQLException e) {
+								e.printStackTrace();
+							}
+	                    } else {
+	                        Driver.printMessage("A NEEDED SERVER IS DOWN");
+	                    }
+						
+						break;
+		    	}
+        	}
         }
     }
-    
-    
     public void commitPendingWrite(){
     	if(pendingWrite!=null){
 	    	pendingWrite.end();
