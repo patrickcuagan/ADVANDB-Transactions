@@ -103,7 +103,7 @@ public class ReadTransaction implements Transaction, Serializable, Runnable{
 		//QUERY CODE BLOCK
 		try{
 			String lock="";
-			lock = "LOCK TABLES countryregion READ;";
+			lock = "LOCK TABLES databyyear READ;";
 			stmt.execute(lock);
 			ResultSet rs = stmt.executeQuery(query);
 			cs = new CachedRowSetImpl();
