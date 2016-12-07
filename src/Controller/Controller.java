@@ -40,22 +40,27 @@ public class Controller {
     }
 
     public void executeTransactions(ArrayList<Transaction> transactionsList) {
-
+    	System.out.print("TEST transact: ");
+    	System.out.println(transactionsList.toString());
         try {
         	for (Transaction transaction : transactionsList){
         		
         		if (transaction instanceof ReadTransaction) {
+        			System.out.println("TESTREAD");
+        			System.out.println(transaction.getScope());
         			switch(transaction.getScope()){
-        				case Constants.HOST_ASIA_AFRICA: 	readAsiaAfrica((ReadTransaction)transaction);System.out.println("MAR"); break; 
-        				case Constants.HOST_EUROPE_AMERICA: readEuroAmerica((ReadTransaction)transaction); break;
-        				case Constants.HOST_ALL:			readAllRegions((ReadTransaction)transaction); break;
+        				case Constants.REGION_ASIA_AFRICA: 		System.out.println("R_AS");readAsiaAfrica((ReadTransaction)transaction);System.out.println("MAR"); break; 
+        				case Constants.REGION_EUROPE_AMERICA: 	System.out.println("R_AM");readEuroAmerica((ReadTransaction)transaction); break;
+        				case Constants.REGION_BOTH:				System.out.println("R_ALL");readAllRegions((ReadTransaction)transaction); break;
+        				default: System.out.println("Cannot Read");
         			}
         		}
         		else if (transaction instanceof WriteTransaction) {
+        			System.out.println("TESTWRITE");
 	        			switch(transaction.getScope()){
-	    				case Constants.HOST_ASIA_AFRICA: 	writeAsiaAfrica((WriteTransaction)transaction); break; 
-	    				case Constants.HOST_EUROPE_AMERICA: writeEuroAmerica((WriteTransaction)transaction); break;
-	    				case Constants.HOST_ALL:			writeAllRegions((WriteTransaction)transaction); break;
+	    				case Constants.REGION_ASIA_AFRICA: 		System.out.println("W_AS");writeAsiaAfrica((WriteTransaction)transaction); break; 
+	    				case Constants.REGION_EUROPE_AMERICA: 	System.out.println("W_AM");writeEuroAmerica((WriteTransaction)transaction); break;
+	    				case Constants.REGION_BOTH:				System.out.println("WA_ALL");writeAllRegions((WriteTransaction)transaction); break;
 	    			}
 	    		}
         		
@@ -212,6 +217,7 @@ public class Controller {
     }
     
     public void readEuroAmerica(ReadTransaction t){
+    	System.out.println("TEST EUROAM");
     	Thread x;
     	String editQuery;
     	switch(name){
