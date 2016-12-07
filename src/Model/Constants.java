@@ -85,13 +85,13 @@ public class Constants {
 			EAQUERY_TITLE5));
 	
 	public static final String HOST_ASIA_AFRICA = "ASIA & AFRICA";
-	public static final String HOST_ASIA_AFRICA_REPLICA = "EUROPE & AMERICA";
+	public static final String HOST_ASIA_AFRICA_REPLICA = "ALL";
 	
 	
 	public static final String HOST_EUROPE_AMERICA = "EUROPE & AMERICA";
-	public static final String HOST_EUROPE_AMERICA_REPLICA = "ALL";
+	public static final String HOST_EUROPE_AMERICA_REPLICA = "ASIA & AFRICA";
 	
 	public static final String HOST_ALL = "ALL";
-	public static final String HOST_ALL_REPLICA = "ASIA & AFRICA";
+	public static final String HOST_ALL_REPLICA = "EUROPE & AMERICA";
 
 }
