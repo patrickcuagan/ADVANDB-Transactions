@@ -21,6 +21,7 @@ public class Driver {
 		Controller runner = new Controller();
 		boolean isLocal = true;
 		runner.setName(Constants.HOST_ALL);
+		runner.setReplicaName(Constants.HOST_ALL);
 		runner.startServer(PORT);
 		runner.startClient();
 		Scanner sc = new Scanner(System.in);

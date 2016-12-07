@@ -185,23 +185,69 @@ public class ServerReturn{
                             parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA));
 	            		}
 	            	}
+	            	
+	            	if(t.getScope().equalsIgnoreCase(Constants.HOST_EUROPE_AMERICA_REPLICA)){
+	            		if(parent.isAddressOf(Constants.HOST_EUROPE_AMERICA_REPLICA, X.getInetAddress())){
+	            			String msg = "\"GOCOMMIT\" ";
+	    	            	SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+	    	            	byte[] prefix = msg.getBytes();
+	                        byte[] trans = serialize(sertrans);
+	                        byte[] fin = byteConcat(prefix, trans);
+	    	            	parent.sendToHost(fin, X.getInetAddress());
+	            		}else{
+	            			String message = "\"ORDERWRITE\" ";
+                            byte[] prefix = message.getBytes();
+                            SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+                            byte[] trans = serialize(sertrans);
+                            byte[] fin = byteConcat(prefix, trans);
+                            parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_EUROPE_AMERICA_REPLICA));
+	            		}
+	            	}else if(t.getScope().equalsIgnoreCase(Constants.HOST_ASIA_AFRICA_REPLICA)){
+	            		if(parent.isAddressOf(Constants.HOST_ASIA_AFRICA_REPLICA, X.getInetAddress())){
+	            			String msg = "\"GOCOMMIT\" ";
+	    	            	SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+	    	            	byte[] prefix = msg.getBytes();
+	                        byte[] trans = serialize(sertrans);
+	                        byte[] fin = byteConcat(prefix, trans);
+	    	            	parent.sendToHost(fin, X.getInetAddress());
+	            		}else{
+	            			String message = "\"ORDERWRITE\" ";
+                            byte[] prefix = message.getBytes();
+                            SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+                            byte[] trans = serialize(sertrans);
+                            byte[] fin = byteConcat(prefix, trans);
+                            parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA_REPLICA));
+	            		}
+	            	}else if(t.getScope().equalsIgnoreCase(Constants.HOST_ALL_REPLICA)){
+	            		if(parent.isAddressOf(Constants.HOST_ALL_REPLICA, X.getInetAddress())){
+	            			String msg = "\"GOCOMMIT\" ";
+	    	            	SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+	    	            	byte[] prefix = msg.getBytes();
+	                        byte[] trans = serialize(sertrans);
+	                        byte[] fin = byteConcat(prefix, trans);
+	    	            	parent.sendToHost(fin, X.getInetAddress());
+	            		}else{
+	            			String message = "\"ORDERWRITE\" ";
+                            byte[] prefix = message.getBytes();
+                            SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+                            byte[] trans = serialize(sertrans);
+                            byte[] fin = byteConcat(prefix, trans);
+                            parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ALL_REPLICA));
+	            		}
+	            	}
+	            	
 	        	}else if(messageType.contains("\"GOCOMMIT\"")){
 	        		SerializableTrans st = (SerializableTrans) deserialize(mybytearray);
 	        		WriteTransaction t = new WriteTransaction(st.getQuery(),st.getScope(), st.isToCommit(), st.getIso_level());
 	        		t.setName(st.getTransName());
 	        		t.setIsolationLevel(st.getIso_level());
+	        		
+	        		if(t.getScope().equalsIgnoreCase(parent.getReplicaName()))
+	        			t.setConnectionReplica();
+	        		
 	            	t.beginTransaction();
 	            	t.start();
 	            	t.end();
-	            	
-	            	switch(parent.getName()){
-	            		case Constants.HOST_EUROPE_AMERICA:
-	            			break;
-	            		case Constants.HOST_ALL:
-	            			break;
-	            		case Constants.HOST_ASIA_AFRICA:
-	            			break;
-	            	}
 	            	
 	        		String msg = "\"DONECOMMIT\" ";
 	        		parent.sendToHost(msg.getBytes(), X.getInetAddress());

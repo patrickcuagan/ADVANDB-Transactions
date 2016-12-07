@@ -24,6 +24,8 @@ public class Controller {
     private Server myServer;
     private CachedRowSetImpl cs;
     private String name = "";
+
+    private String replicaName = "";
     private ArrayList<Transaction> transactions;
     private ArrayList<String> queries, scopes;
     WriteTransaction pendingWrite;
@@ -118,7 +120,7 @@ public class Controller {
 			if(myClient.checkAsiaAfricaIfExists()){
 				try{
             		partialCommit(t);
-            		String message = "\"ORDERWRITE\" \"ORIGINAL\"";
+            		String message = "\"ORDERWRITE\"";
                     byte[] prefix = message.getBytes();
                     System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_ASIA_AFRICA");
                     SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
@@ -147,7 +149,7 @@ public class Controller {
                     myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
                     
 //            		partialCommit(t);
-            		message = "\"ORDERWRITE\" \"REPLICATE\"";
+            		message = "\"ORDERWRITE\"";
                     prefix = message.getBytes();
                     System.out.println(((WriteTransaction)t).isToCommit()+" :INSIDE WRITE_ASIA_AFRICA");
                     SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
@@ -167,7 +169,7 @@ public class Controller {
     	switch(name){
     		case Constants.HOST_ALL:
     			//begin writing + send requests
-//                if (myClient.checkAsiaAfricaIfExists() && myClient.checkEuropeAmericaIfExists()) {
+                if (myClient.checkAsiaAfricaIfExists() && myClient.checkEuropeAmericaIfExists()) {
                 	try {
                 		pendingWrite = (WriteTransaction) t;
                 		pendingWrite.beginTransaction();
@@ -177,21 +179,22 @@ public class Controller {
                         SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), ((WriteTransaction)t).isToCommit(), t.getIsolationLevel(), t.getName());
                         byte[] trans = serialize(st);
                         byte[] fin = byteConcat(prefix, trans);
-//                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
-//                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ASIA_AFRICA));
+                        myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_EUROPE_AMERICA));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e){
                     	e.printStackTrace();
                     }
-//                } else {
-//                    //return false;
-//                }
+                } else {
+                    //return false;
+                }
     			break;
     		case Constants.HOST_EUROPE_AMERICA:
                 if (myClient.checkAllRegionsIfExists() && myClient.checkAsiaAfricaIfExists()) {
                 	try {
                 		pendingWrite = (WriteTransaction) t;
+                		pendingWrite.setConnectionReplica();
                 		pendingWrite.beginTransaction();
                 		pendingWrite.start();
                         String message = "\"WRITEREQUEST\" ";
@@ -294,9 +297,9 @@ public class Controller {
 			case Constants.HOST_ALL:
 	        	editQuery="";
 	        	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa') ";
 	        	}else{
-	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa') ";
 	        	}
 	        	t.setQuery(editQuery);
 	            x = new Thread(t);
@@ -313,9 +316,9 @@ public class Controller {
 	                try {
 	                	editQuery="";
 	                	if(t.getQuery().contains("WHERE") || t.getQuery().contains("where") || t.getQuery().contains("Where")){
-	    	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	    	        		editQuery= t.getQuery()+" AND region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa') ";
 	    	        	}else{
-	    	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa) ";
+	    	        		editQuery= t.getQuery()+" WHERE region IN ('East Asia and Pacific', 'Middle East & North Africa', 'South Asia', 'Sub-Saharan Africa') ";
 	                	}
 	                	t.setQuery(editQuery);
 	                	
@@ -378,7 +381,7 @@ public class Controller {
                     SerializableTrans st = new SerializableTrans(t.getQuery(), t.getScope(), t.getIsolationLevel(), t.getName());
                     byte[] trans = serialize(st);
                     byte[] fin = byteConcat(prefix, trans);
-                    myClient.SEND(fin, myClient.getAddressFromName("CENTRAL"));
+                    myClient.SEND(fin, myClient.getAddressFromName(Constants.HOST_ALL));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -502,6 +505,10 @@ public class Controller {
         this.name = name;
     }
 
+    public void setReplicaName(String name) {
+        this.replicaName = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -511,6 +518,7 @@ public class Controller {
     }
 
     public void sendToHost(byte[] msg, InetAddress receiver) {
+    	System.out.println("SENDING "+msg+" TO "+receiver);
         myClient.SEND(msg, receiver);
     }
 
@@ -555,5 +563,10 @@ public class Controller {
     public void setCs(CachedRowSetImpl cs) {
         this.cs = cs;
     }
+
+	public String getReplicaName() {
+		// TODO Auto-generated method stub
+		return replicaName;
+	}
 
 }

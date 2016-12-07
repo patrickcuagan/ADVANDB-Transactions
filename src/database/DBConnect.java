@@ -33,7 +33,7 @@ public class DBConnect {
         param = "?useSSL=false";
         database = "wdi";
         username = "root";
-        password = "root";//tempo
+        password = "password";//tempo
     }
      
     /**

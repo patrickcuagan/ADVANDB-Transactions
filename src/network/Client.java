@@ -36,7 +36,7 @@ public class Client implements Runnable{
         try {
 			System.out.println(InetAddress.getLocalHost());
 		
-        	hosts.add(InetAddress.getByName("172.20.10.2"));
+        	hosts.add(InetAddress.getByName("172.20.10.7"));
         	hosts.add(InetAddress.getByName("172.20.10.6"));
         	
 		} catch (UnknownHostException e) {
@@ -44,7 +44,7 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
         //hosts.add(InetAddress.getByName("ip"));
-        names.add(Constants.HOST_ALL);
+        names.add(Constants.HOST_EUROPE_AMERICA);
         names.add(Constants.HOST_ASIA_AFRICA);
         
         

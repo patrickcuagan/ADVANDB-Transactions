@@ -16,7 +16,9 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 	String scope;
 	String query;
 	Connection con;
+	Connection conReplica;
 	Statement stmt;
+	Statement stmtReplica;
 	CachedRowSetImpl cs;
 	boolean toCommit;
 	boolean isDonePopulating;
@@ -107,6 +109,7 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 		try {
 			beginTransaction();
 			start();
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -132,6 +135,25 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void replicate() {
+		try{
+			String lock="";
+			lock = "LOCK TABLES databyyear WRITE;";
+			
+			stmtReplica.execute(lock);
+			System.out.println(lock);
+			String SQL = query;
+			stmtReplica.executeUpdate(SQL);
+			System.out.println(SQL);
+			
+			isDonePopulating = true;
+			String unlock = "UNLOCK TABLES;";
+			stmtReplica.execute(unlock);
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	public CachedRowSetImpl getResultSet(){
