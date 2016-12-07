@@ -120,8 +120,10 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 			lock = "LOCK TABLES databyyear WRITE;";
 			
 			stmt.execute(lock);
+			System.out.println(lock);
 			String SQL = query;
 			stmt.executeUpdate(SQL);
+			System.out.println(SQL);
 			
 			isDonePopulating = true;
 			String unlock = "UNLOCK TABLES;";

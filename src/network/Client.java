@@ -36,8 +36,8 @@ public class Client implements Runnable{
         try {
 			System.out.println(InetAddress.getLocalHost());
 		
-        	hosts.add(InetAddress.getByName("10.100.202.48"));
-        	hosts.add(InetAddress.getByName("192.168.1.105"));
+        	hosts.add(InetAddress.getByName("172.20.10.2"));
+        	hosts.add(InetAddress.getByName("172.20.10.6"));
         	
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -97,7 +97,7 @@ public class Client implements Runnable{
     
     public boolean checkAllRegionsIfExists(){
     	try{
-    		System.out.println(hosts.get(names.indexOf(Constants.HOST_ALL)));
+    		System.out.println("CHECKING ALL: "+hosts.get(names.indexOf(Constants.HOST_ALL)));
     		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_ALL)), port);
     		s.close();
     	}catch(IOException e){
@@ -109,7 +109,7 @@ public class Client implements Runnable{
     
     public boolean checkAsiaAfricaIfExists(){
     	try{
-    		System.out.println(hosts.get(names.indexOf(Constants.HOST_ASIA_AFRICA)));
+    		System.out.println("CHECKING AA: "+hosts.get(names.indexOf(Constants.HOST_ASIA_AFRICA)));
     		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_ASIA_AFRICA)), port);
     		s.close();
     	}catch(IOException e){
@@ -121,7 +121,7 @@ public class Client implements Runnable{
     
     public boolean checkEuropeAmericaIfExists(){
     	try{
-    		System.out.println(hosts.get(names.indexOf(Constants.HOST_EUROPE_AMERICA)));
+    		System.out.println("CHECKING EA: "+hosts.get(names.indexOf(Constants.HOST_EUROPE_AMERICA)));
     		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_EUROPE_AMERICA)), port);
     		s.close();
     	}catch(IOException e){
@@ -132,6 +132,9 @@ public class Client implements Runnable{
     }
     
     public InetAddress getAddressFromName(String name){
+    	System.out.println(name);
+    	System.out.println(names.toString());
+    	
     	return hosts.get(names.indexOf(name));
     }
             
