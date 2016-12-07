@@ -27,9 +27,9 @@ public class Constants {
 	
 	
 	public static final String EUROPE_AMERICA_TITLE1 = "EUROPE_AMERICA Read Table";    
-	public static final String EAQUERY_TITLE2 = "EUROPE_AMERICA Update Table 1";
-	public static final String EAQUERY_TITLE3 = "EUROPE_AMERICA Update Table 2";
-	public static final String EAQUERY_TITLE4 = "EUROPE_AMERICA Update Table 3";
+	public static final String EAQUERY_TITLE2 = "EUROPE_AMERICA TOT.POP +10 AFG YR2000";
+	public static final String EAQUERY_TITLE3 = "EUROPE_AMERICA TOT.POP +20 AFG YR2000";
+	public static final String EAQUERY_TITLE4 = "EUROPE_AMERICA TOT.POP -100 AFG YR2000";
 	public static final String EAQUERY_TITLE5 = "EUROPE_AMERICA Delete";  
 	/*public static final String PQUERY_TITLE6 = "Palawan Increment 10";    
 	public static final String PQUERY_TITLE7 = "Palawan Increment 20";
@@ -37,12 +37,12 @@ public class Constants {
 	public static final String PQUERY_TITLE9 = "Palawan Increment 40";
 	public static final String PQUERY_TITLE0 = "Palawan Increment 50";*/
 	
-	public static final String BQUERY_1 = "SELECT countrycode, yearc, data FROM wdi.databyyear WHERE seriescode = 'SM.POP.TOTL' AND yearc='2000 [YR2000]' AND  countrycode='ABW'";
-	public static final String BQUERY_2 = "UPDATE `wdi`.`databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
-	public static final String BQUERY_3 = "UPDATE `wdi`.`databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
-	public static final String BQUERY_4 = "UPDATE `wdi`.`databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
+	public static final String BQUERY_1 = "SELECT countrycode, yearc, data FROM databyyear WHERE seriescode = 'SM.POP.TOTL' AND yearc='2000 [YR2000]' AND  countrycode='ABW' ";
+	public static final String BQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
+	public static final String BQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
+	public static final String BQUERY_4 = "UPDATE `databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";
 	
-	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc`='2000 [YR2000]' ";
+	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '201%' AND `seriescode`='SM.POP.TOTL' and`countrycode`='AFG' ";
 	public static final String AAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
 	public static final String AAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
 	public static final String AAQUERY_4 = "UPDATE `databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='AFG';";
@@ -53,10 +53,10 @@ public class Constants {
 	public static final String MQUERY_9 = "UPDATE hpq_death SET mdeadage = mdeadage + 40 ";
 	public static final String MQUERY_0 = "UPDATE hpq_death SET mdeadage = mdeadage + 50 ";*/
 	
-	public static final String EUROPE_AMERICA_QUERY1 = "SELECT * from europe_america.databyyear ";
-	public static final String EAQUERY_2 =  "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";//"UPDATE europe_america.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
-	public static final String EAQUERY_3 = "UPDATE europe_america.databyyear SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND ";
-	public static final String EAQUERY_4 = "UPDATE europe_america.databyyear SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String EUROPE_AMERICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '201%' AND `seriescode`='SM.POP.TOTL' and`countrycode`='ABW' ";
+	public static final String EAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' and`yearc`='2000 [YR2000]' and`countrycode`='ABW';";//"UPDATE europe_america.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String EAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND ";
+	public static final String EAQUERY_4 = "UPDATE `databyyear` SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND ";
 	public static final String EAQUERY_5 = "DELETE FROM hpq_death";	
 	/*public static final String PQUERY_6 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
 	public static final String PQUERY_7 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
