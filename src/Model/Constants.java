@@ -42,7 +42,7 @@ public class Constants {
 	public static final String BQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_4 = "UPDATE `databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	
-	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '2000' AND `seriescode`='SM.POP.TOTL' and`countrycode`='AFG' ";
+	public static final String ASIA_AFRICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '2000%' AND `seriescode`='SM.POP.TOTL' and`countrycode`='AFG' ";
 	public static final String AAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='AFG';";
 	public static final String AAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='AFG';";
 	public static final String AAQUERY_4 = "UPDATE `databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='AFG';";
@@ -53,10 +53,10 @@ public class Constants {
 	public static final String MQUERY_9 = "UPDATE hpq_death SET mdeadage = mdeadage + 40 ";
 	public static final String MQUERY_0 = "UPDATE hpq_death SET mdeadage = mdeadage + 50 ";*/
 	
-	public static final String EUROPE_AMERICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '2000' AND `seriescode`='SM.POP.TOTL' and`countrycode`='ABW' ";
+	public static final String EUROPE_AMERICA_QUERY1 = "SELECT * from databyyear NATURAL JOIN countryregion WHERE `yearc` LIKE '2000%' AND `seriescode`='SM.POP.TOTL' and`countrycode`='ABW' ";
 	public static final String EAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";//"UPDATE europe_america.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
-	public static final String EAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE seriescode = 'SP.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
-	public static final String EAQUERY_4 = "UPDATE `databyyear` SET data = data + 30 WHERE seriescode = 'SP.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
+	public static final String EAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";//"UPDATE
+	public static final String EAQUERY_4 = "UPDATE `databyyear` SET data = data - 100 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";//"UPDATE
 	public static final String EAQUERY_5 = "DELETE FROM hpq_death";	
 	/*public static final String PQUERY_6 = "UPDATE hpq_death SET mdeadage = mdeadage + 10 ";
 	public static final String PQUERY_7 = "UPDATE hpq_death SET mdeadage = mdeadage + 20 ";
