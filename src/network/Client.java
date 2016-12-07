@@ -6,6 +6,7 @@ import java.util.Scanner;
 import javax.swing.JOptionPane;
 
 import Controller.Controller;
+import Model.Constants;
 
 public class Client implements Runnable{
     int port = 1515;
@@ -32,10 +33,10 @@ public class Client implements Runnable{
         hosts = new ArrayList();
         names = new ArrayList();
         
-        
         try {
-        	
-        	hosts.add(InetAddress.getByName("192.168.1.148"));
+			System.out.println(InetAddress.getLocalHost());
+		
+        	hosts.add(InetAddress.getByName("10.100.202.48"));
         	hosts.add(InetAddress.getByName("192.168.1.105"));
         	
 		} catch (UnknownHostException e) {
@@ -43,8 +44,8 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
         //hosts.add(InetAddress.getByName("ip"));
-        names.add("ALL_REGIONS");
-        names.add("ASIA_AFRICA");
+        names.add(Constants.HOST_ALL);
+        names.add(Constants.HOST_ASIA_AFRICA);
         
         
         //names.add("PALAWAN");
@@ -81,6 +82,7 @@ public class Client implements Runnable{
     }
     
     public void SEND (byte[] msg, InetAddress receiver){
+    	System.out.println("SENDING TO : "+receiver);
     	try{
 			Socket temp = new Socket(receiver,port);
 			OutputStream output = temp.getOutputStream();
@@ -95,7 +97,8 @@ public class Client implements Runnable{
     
     public boolean checkAllRegionsIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("ALL_REGIONS")), port);
+    		System.out.println(hosts.get(names.indexOf(Constants.HOST_ALL)));
+    		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_ALL)), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();
@@ -106,7 +109,8 @@ public class Client implements Runnable{
     
     public boolean checkAsiaAfricaIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("ASIA_AFRICA")), port);
+    		System.out.println(hosts.get(names.indexOf(Constants.HOST_ASIA_AFRICA)));
+    		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_ASIA_AFRICA)), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();
@@ -117,7 +121,8 @@ public class Client implements Runnable{
     
     public boolean checkEuropeAmericaIfExists(){
     	try{
-    		Socket s = new Socket(hosts.get(names.indexOf("EUROPE_AMERICA")), port);
+    		System.out.println(hosts.get(names.indexOf(Constants.HOST_EUROPE_AMERICA)));
+    		Socket s = new Socket(hosts.get(names.indexOf(Constants.HOST_EUROPE_AMERICA)), port);
     		s.close();
     	}catch(IOException e){
     		e.printStackTrace();
