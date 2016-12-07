@@ -11,6 +11,7 @@ import java.util.concurrent.CyclicBarrier;
 import com.sun.rowset.CachedRowSetImpl;
 
 import database.DBConnect;
+import database.DBConnectReplica;
 
 public class ReadTransaction implements Transaction, Serializable, Runnable{
 	String scope;
@@ -185,7 +186,7 @@ public class ReadTransaction implements Transaction, Serializable, Runnable{
 	@Override
 	public void setConnectionReplica() {
 		// TODO Auto-generated method stub
-		con = DBConnect.getConnectionReplica();
+		con = DBConnectReplica.getReplicaConnection();
 		
 	}
 

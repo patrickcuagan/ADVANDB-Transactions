@@ -3,6 +3,7 @@ import java.io.Serializable;
 import com.sun.rowset.CachedRowSetImpl;
 
 import database.DBConnect;
+import database.DBConnectReplica;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -208,7 +209,7 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 	@Override
 	public void setConnectionReplica() {
 		// TODO Auto-generated method stub
-		con = DBConnect.getConnectionReplica();
+		con = DBConnectReplica.getReplicaConnection();
 		
 	}
 
