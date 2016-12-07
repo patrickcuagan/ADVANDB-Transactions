@@ -87,11 +87,17 @@ public class Constants {
 	public static final String HOST_ASIA_AFRICA = "ASIA & AFRICA";
 	public static final String HOST_ASIA_AFRICA_REPLICA = "ALL";
 	
+	public static final String HOST_ASIA_AFRICAS_REPLICA = "EUROPE & AMERICA";
+	
+	
 	
 	public static final String HOST_EUROPE_AMERICA = "EUROPE & AMERICA";
 	public static final String HOST_EUROPE_AMERICA_REPLICA = "ASIA & AFRICA";
+
+	public static final String HOST_EUROPE_AMERICAS_REPLICA = "ALL";
 	
 	public static final String HOST_ALL = "ALL";
 	public static final String HOST_ALL_REPLICA = "EUROPE & AMERICA";
 
+	public static final String HOST_ALLS_REPLICA = "ASIA & AFRICA";
 }
