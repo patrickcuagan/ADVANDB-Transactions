@@ -255,13 +255,11 @@ public class ServerReturn{
 	        		SerializableTrans writetrans = (SerializableTrans) deserialize(mybytearray);
 	        		WriteTransaction t = new WriteTransaction(writetrans.getQuery(),writetrans.getScope(), writetrans.isToCommit(), writetrans.getIso_level());
 	            	t.setIsolationLevel(writetrans.getIso_level());
-	            	
-	            	if(messageType.contains("\"REPLICATE\"")){
-	            		t.setConnectionReplica();
-	            	}else if(messageType.contains("\"ORIGINAL\"")){
-	            		t.setConnection();
-	            	}
-	            	
+
+	        		if(t.getScope().equalsIgnoreCase(parent.getReplicaName()))
+	        			t.setConnectionReplica();
+	        		
+
 	        		t.beginTransaction();
 	            	t.start();
 	            	t.end();

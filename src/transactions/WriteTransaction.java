@@ -209,6 +209,7 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 	@Override
 	public void setConnectionReplica() {
 		// TODO Auto-generated method stub
+		System.out.println("Replica Change");
 		con = DBConnectReplica.getReplicaConnection();
 		
 	}
