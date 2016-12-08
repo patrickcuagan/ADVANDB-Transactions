@@ -228,7 +228,7 @@ public class TransactionPanel extends JPanel{
 		JScrollPane scroll = new JScrollPane(bottomPanel);
 	    scroll.setPreferredSize(new Dimension(50,50));
 	    
-		panel.add(scroll, BorderLayout.CENTER);
+		//panel.add(scroll, BorderLayout.CENTER);
 		
 		JPanel addBtnContainer = new JPanel();
 		addBtnContainer.setLayout(new RelativeLayout(RelativeLayout.X_AXIS));
@@ -252,11 +252,11 @@ public class TransactionPanel extends JPanel{
 		
 		JLabel l = new JLabel("Filtering Options   ");
 		l.setHorizontalAlignment(SwingConstants.RIGHT);
-		addBtnContainer.add(l, new Float(2));
+		//addBtnContainer.add(l, new Float(2));
 		btnAdd = new JButton("+");
 		btnAdd.setPreferredSize(new Dimension(50,20));
 		btnAdd.addActionListener(new ButtonListener());
-		addBtnContainer.add(btnAdd, new Float(1));
+		//addBtnContainer.add(btnAdd, new Float(1));
 		panel.add(addBtnContainer, BorderLayout.NORTH);
 		
 		return panel;

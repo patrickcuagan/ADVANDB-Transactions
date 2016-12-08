@@ -131,7 +131,7 @@ public class MainFrame extends JFrame{
 	
 	public JPanel addTransactionOptions(){
 		JPanel btnPanel = new JPanel();
-	    btnPanel.setLayout(new GridLayout(0,2));
+	    btnPanel.setLayout(new GridLayout(0,1));
 	    
 	    runBtn = new JButton("Run");
 	    runBtn.addActionListener(new ButtonListener());
@@ -148,15 +148,15 @@ public class MainFrame extends JFrame{
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
 		JPanel optionsHolder = new JPanel();
-		optionsHolder.setLayout(new GridLayout(0,2));
+		optionsHolder.setLayout(new GridLayout(0,1));
 		
 		JLabel l = new JLabel("Isolation Level:   ");
 		l.setHorizontalAlignment(SwingConstants.RIGHT);
-		optionsHolder.add(l);
+		//optionsHolder.add(l);
 		
 		isolvlOptions = new JComboBox(new String[] {WriteTransaction.ISO_READ_COMMITTED_LBL, WriteTransaction.ISO_READ_UNCOMMITTED_LBL, WriteTransaction.ISO_REPEATABLE_READ_LBL, WriteTransaction.ISO_SERIALIZABLE_LBL});
 		isolvlOptions.setSelectedIndex(0);
-		optionsHolder.add(isolvlOptions);
+		//optionsHolder.add(isolvlOptions);
 		
 		panel.add(optionsHolder, BorderLayout.SOUTH);
 		return panel;
