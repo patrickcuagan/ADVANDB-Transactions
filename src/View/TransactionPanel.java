@@ -353,6 +353,7 @@ public class TransactionPanel extends JPanel{
 	            		case Constants.BQUERY_TITLE2: return Constants.BQUERY_2;
 	            		case Constants.BQUERY_TITLE3: return Constants.BQUERY_3;
 	            		case Constants.BQUERY_TITLE4: return Constants.BQUERY_4;
+	            		case Constants.BQUERY_TITLE5: return Constants.BQUERY_5;
 	            		case Constants.BQUERY_TITLE6: return Constants.BQUERY_6;
 	            		case Constants.BQUERY_TITLE7: return Constants.BQUERY_7;
 	            	}

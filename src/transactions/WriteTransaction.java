@@ -129,11 +129,18 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 			stmt.executeUpdate(SQL);
 			System.out.println(SQL);
 			
-			isDonePopulating = true;
-			String unlock = "UNLOCK TABLES;";
-			stmt.execute(unlock);
 		}catch(SQLException e){
 			e.printStackTrace();
+		}finally{
+			isDonePopulating = true;
+			String unlock = "UNLOCK TABLES;";
+			try {
+				stmt.execute(unlock);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		
 	}

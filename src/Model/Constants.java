@@ -33,7 +33,7 @@ public class Constants {
 	public static final String BQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_4 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2001 [YR2000]',5000);";
-	public static final String BQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2000]',5000);";
+	public static final String BQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2000]',10000);";
 	public static final String BQUERY_6 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2001 [YR2000]';";
 	public static final String BQUERY_7 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2002 [YR2000]';";
 	
@@ -41,7 +41,7 @@ public class Constants {
 	public static final String AAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='AFG';";
 	public static final String AAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='AFG';";
 	public static final String AAQUERY_4 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('AFG','SM.POP.TOTL','2001 [YR2000]',5000);";
-	public static final String AAQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('AFG','SM.POP.TOTL','2002 [YR2000]',5000);";
+	public static final String AAQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2000]',10000);";
 	public static final String AAQUERY_6 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'AFG' AND yearc = '2001 [YR2000]';";
 	public static final String AAQUERY_7 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'AFG' AND yearc = '2002 [YR2000]';";
 	
@@ -49,7 +49,7 @@ public class Constants {
 	public static final String EAQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";//"UPDATE europe_america.databyyear SET data = data + 10 WHERE seriescode = 'SP.POP.TOTL' AND ";
 	public static final String EAQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";//"UPDATE
 	public static final String EAQUERY_4 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2001 [YR2000]',5000);";
-	public static final String EAQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2000]',5000);";
+	public static final String EAQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2000]',10000);";
 	public static final String EAQUERY_6 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2001 [YR2000]';";
 	public static final String EAQUERY_7 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2002 [YR2000]';";
 	
