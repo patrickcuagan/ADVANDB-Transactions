@@ -453,7 +453,7 @@ public class TransactionPanel extends JPanel{
 	public Transaction getTransactionDetails(){
 		String query = getQuery();
 		Transaction transaction = null;
-		if (query.contains("UPDATE") || query.contains("DELETE")){
+		if (query.contains("UPDATE") || query.contains("DELETE") || query.contains("INSERT")){
 			transaction = new WriteTransaction(query, getArea(), getBooleanAbort(), MainFrame.getIsoLevel());
 			transaction.setName(this.getName());
 		}
