@@ -21,6 +21,7 @@ import com.sun.rowset.CachedRowSetImpl;
 import Controller.Controller;
 import Model.Constants;
 import transactions.WriteTransaction;
+import transactions.PendingReplicateTransaction;
 import transactions.ReadTransaction;
 
 public class ServerReturn{
@@ -28,6 +29,7 @@ public class ServerReturn{
     private Scanner INPUT;
     private InputStream extractor;
     private PrintWriter OUT;
+    private PendingReplicateTransaction replica;
     String MESSAGE ="";
     Controller parent;
     byte[] mybytearray=new byte[65000000];
@@ -36,6 +38,7 @@ public class ServerReturn{
     
     public ServerReturn(Socket X, Controller parent){
     	this.parent = parent;
+    	replica = new PendingReplicateTransaction(parent.getMyClient(), parent);
     	parent.printMessage("Created server return");
         RECEIVE(X);
     }
@@ -185,7 +188,9 @@ public class ServerReturn{
                             parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA));
 	            		}
 	            	}
-	            	System.out.println(t.getScope());
+	            	System.out.println("SENDING TO REPLICA");
+	            	
+	            	/*
 	            	if(t.getScope().equalsIgnoreCase(Constants.HOST_EUROPE_AMERICAS_REPLICA)){
 	            		System.out.println("---EURAM REPLICA-----");
             			
@@ -207,22 +212,24 @@ public class ServerReturn{
 	            		
 	            	}else if(t.getScope().equalsIgnoreCase(Constants.HOST_ASIA_AFRICAS_REPLICA)){
 	            		System.out.println("---ASAF REPLICA-----");
-            			
-	            		if(parent.getReplicaName().equals(t.getScope())){
-	            			
-	    	        		t.setConnectionReplica();
-	    	            	t.beginTransaction();
-	    	            	t.start();
-	    	            	t.end();
-	    	            	
-	            		}else{
-	            			String msg = "\"GOCOMMIT\" ";
-	    	            	SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
-	    	            	byte[] prefix = msg.getBytes();
-	                        byte[] trans = serialize(sertrans);
-	                        byte[] fin = byteConcat(prefix, trans);
-	    	            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA));
-	            		}
+            			if(parent.getMyClient().checkAsiaAfricaIfExists()){
+		            		if(parent.getReplicaName().equals(t.getScope())){	
+		    	        		t.setConnectionReplica();
+		    	            	t.beginTransaction();
+		    	            	t.start();
+		    	            	t.end();
+		    	            	
+		            		}else{
+		            			String msg = "\"GOCOMMIT\" ";
+		    	            	SerializableTrans sertrans = new SerializableTrans(t.getQuery(), t.getScope(), t.isToCommit(), t.getIsolationLevel(), t.getName());
+		    	            	byte[] prefix = msg.getBytes();
+		                        byte[] trans = serialize(sertrans);
+		                        byte[] fin = byteConcat(prefix, trans);
+		    	            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA));
+		            		}
+            			}else{
+            				//
+            			}
 	            	}else if(t.getScope().equalsIgnoreCase(Constants.HOST_ALLS_REPLICA)){
 	            		System.out.println("---ALLS REPLICA-----");
 	            			
@@ -241,7 +248,9 @@ public class ServerReturn{
 	                        byte[] fin = byteConcat(prefix, trans);
 	    	            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ALL));
 	            		}
-	            	}
+	            	}*/
+	            	
+	            	replica.addReplication(t);
 	            	
 	        	}else if(messageType.contains("\"GOCOMMIT\"")){
 	        		SerializableTrans st = (SerializableTrans) deserialize(mybytearray);
