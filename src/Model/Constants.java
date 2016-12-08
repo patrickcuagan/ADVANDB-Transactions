@@ -32,8 +32,8 @@ public class Constants {
 	public static final String BQUERY_1 = "SELECT countrycode, yearc, data FROM databyyear WHERE seriescode = 'SM.POP.TOTL' AND yearc LIKE '200%' AND  countrycode='ABW' ";
 	public static final String BQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
-	public static final String BQUERY_4 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2001 [YR2001]',5000);";
-	public static final String BQUERY_5 = "INSERT INTO `databyyear`(`countrycode`,`seriescode`,`yearc`,`Data`)VALUES('ABW','SM.POP.TOTL','2002 [YR2002]',10000);";
+	public static final String BQUERY_4 = "insert into databyyear(countrycode, seriescode, yearc, Data) select 'ABW','SM.POP.TOTL','2001 [YR2001]',5000 FROM country WHERE countrycode = 'ABW';";
+	public static final String BQUERY_5 = "insert into databyyear(countrycode, seriescode, yearc, Data) select 'ABW','SM.POP.TOTL','2002 [YR2002]',10000 FROM country WHERE countrycode = 'ABW';";
 	public static final String BQUERY_6 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2001 [YR2001]';";
 	public static final String BQUERY_7 = "DELETE FROM `databyyear`WHERE seriescode = 'SM.POP.TOTL' AND countrycode = 'ABW' AND yearc = '2002 [YR2002]';";
 	
