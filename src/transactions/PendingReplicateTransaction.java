@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import Controller.Controller;
 import Model.Constants;
@@ -25,26 +26,34 @@ public class PendingReplicateTransaction implements Runnable, Serializable{
 		translist = new ArrayList<WriteTransaction>();
 		myClient = c;
 		parent = p;
-		x = new Thread();
+		x = new Thread(this);
 	}
 	
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		for(int i=0; i<translist.size(); i++){
+	
+		System.out.println(translist.toString());
+		for(int i=translist.size()-1; i>=0; i--){
 			boolean exist;
-			switch(translist.get(i).getScope()){
-				case Constants.HOST_ALL:
-					exist = myClient.checkEuropeAmericaIfExists();
-					break;
-				case Constants.HOST_EUROPE_AMERICA:
-					exist = myClient.checkAsiaAfricaIfExists();
-					break;
-				case Constants.HOST_ASIA_AFRICA:
-					exist = myClient.checkAllRegionsIfExists();
-					break;
-				default: exist = false;
+			
+			if(!translist.get(i).getScope().equals(parent.getReplicaName()))
+				switch(translist.get(i).getScope()){
+					case Constants.HOST_ALL:
+						exist = myClient.checkEuropeAmericaIfExists();
+						break;
+					case Constants.HOST_EUROPE_AMERICA:
+						exist = myClient.checkAsiaAfricaIfExists();
+						break;
+					case Constants.HOST_ASIA_AFRICA:
+						exist = myClient.checkAllRegionsIfExists();
+						break;
+					default: exist = false;
+			}else{
+				exist = true;
 			}
+			System.out.println("EXISTING: "+exist);
+			
 			if(exist){
 				WriteTransaction t = translist.get(i);
 				try{
@@ -60,8 +69,23 @@ public class PendingReplicateTransaction implements Runnable, Serializable{
 		            	byte[] prefix = msg.getBytes();
 	                    byte[] trans = serialize(sertrans);
 	                    byte[] fin = byteConcat(prefix, trans);
-		            	parent.sendToHost(fin, parent.getAddressOf(t.getScope()));
+	                    
+
+	    				switch(translist.get(i).getScope()){
+	    					case Constants.HOST_ALL:
+	    		            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ALL_REPLICA));
+	    						break;
+	    					case Constants.HOST_EUROPE_AMERICA:
+	    		            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_EUROPE_AMERICA_REPLICA));
+	    						break;
+	    					case Constants.HOST_ASIA_AFRICA:
+	    		            	parent.sendToHost(fin, parent.getAddressOf(Constants.HOST_ASIA_AFRICA_REPLICA));
+	    						break;
+	    					default: exist = false;
+	    				}
+
 	        		}
+	        		translist.remove(i);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -71,25 +95,28 @@ public class PendingReplicateTransaction implements Runnable, Serializable{
 			
 		}
 		
+
+		
 	}
 	
 	public void start(){
 		
 		while(true){
-			x.start();
+			x.run();
 			
-			try {
-				x.wait(10000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	
 	public void addReplication(WriteTransaction t){
 		translist.add(t);
-		x.notify();
+		
+		if(!t.getScope().equals(Constants.HOST_ALL)){
+			t.setScope(Constants.HOST_ALL);
+			WriteTransaction r = t;
+			translist.add(r);
+		}
+		x.start();
+
 	}
 
     public static byte[] serialize(Object obj) throws IOException {

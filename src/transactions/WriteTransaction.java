@@ -221,5 +221,10 @@ public class WriteTransaction implements Transaction, Runnable, Serializable{
 		
 	}
 
+	public void setScope(String scope) {
+		// TODO Auto-generated method stub
+		this.scope=scope;
+	}
+
 	
 }
