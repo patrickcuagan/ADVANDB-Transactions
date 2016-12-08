@@ -57,7 +57,7 @@ public class PendingReplicateTransaction implements Runnable, Serializable{
 			if(exist){
 				WriteTransaction t = translist.get(i);
 				try{
-	        		if(parent.getReplicaName().equals(t.getScope())){	
+	        		if(parent.getReplicaName().equals(t.getScope()) || t.getScope().equals("ALL")){	
 		        		t.setConnectionReplica();
 		            	t.beginTransaction();
 		            	t.start();
