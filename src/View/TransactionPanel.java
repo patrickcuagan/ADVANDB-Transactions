@@ -328,6 +328,8 @@ public class TransactionPanel extends JPanel{
 	            	case Constants.EAQUERY_TITLE3: return Constants.EAQUERY_3;                   
 	            	case Constants.EAQUERY_TITLE4: return Constants.EAQUERY_4;                   
 	            	case Constants.EAQUERY_TITLE5: return Constants.EAQUERY_5;    
+	            	case Constants.EAQUERY_TITLE6: return Constants.EAQUERY_6;
+	            	case Constants.EAQUERY_TITLE7: return Constants.EAQUERY_7;
 	            	}
 	            }
             }
@@ -339,6 +341,8 @@ public class TransactionPanel extends JPanel{
             		case Constants.AAQUERY_TITLE3: return Constants.AAQUERY_3;
             		case Constants.AAQUERY_TITLE4: return Constants.AAQUERY_4;
             		case Constants.AAQUERY_TITLE5: return Constants.AAQUERY_5;
+            		case Constants.AAQUERY_TITLE6: return Constants.AAQUERY_6;
+            		case Constants.AAQUERY_TITLE7: return Constants.AAQUERY_7;
 	            	}
 	            }
             }
@@ -349,6 +353,8 @@ public class TransactionPanel extends JPanel{
 	            		case Constants.BQUERY_TITLE2: return Constants.BQUERY_2;
 	            		case Constants.BQUERY_TITLE3: return Constants.BQUERY_3;
 	            		case Constants.BQUERY_TITLE4: return Constants.BQUERY_4;
+	            		case Constants.BQUERY_TITLE6: return Constants.BQUERY_6;
+	            		case Constants.BQUERY_TITLE7: return Constants.BQUERY_7;
 	            	}
 	            }
             }
