@@ -110,9 +110,10 @@ public class PendingReplicateTransaction implements Runnable, Serializable{
 	public void addReplication(WriteTransaction t){
 		translist.add(t);
 		
+		
+		
 		if(!t.getScope().equals(Constants.HOST_ALL)){
-			t.setScope(Constants.HOST_ALL);
-			WriteTransaction r = t;
+			WriteTransaction r = new WriteTransaction(t.getQuery(), Constants.HOST_ALL, t.isToCommit(), t.getIsolationLevel());
 			translist.add(r);
 		}
 		x.start();
