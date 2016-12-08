@@ -96,8 +96,9 @@ public class TransactionPanel extends JPanel{
 		infoPanel.setPreferredSize(new Dimension(500,CUST_HEIGHT));
 		infoPanel.setLayout(new RelativeLayout(RelativeLayout.X_AXIS));
 		
-		infoPanel.add(createLeftControl(), new Float(1));
-		infoPanel.add(createRightControl(), new Float(2));
+		
+		infoPanel.add(createLeftControl(), new Float(2));
+		infoPanel.add(createRightControl(), new Float(1));
 		return infoPanel;
 	}
 	
@@ -231,10 +232,10 @@ public class TransactionPanel extends JPanel{
 		//panel.add(scroll, BorderLayout.CENTER);
 		
 		JPanel addBtnContainer = new JPanel();
-		addBtnContainer.setLayout(new RelativeLayout(RelativeLayout.X_AXIS));
+		addBtnContainer.setLayout(new RelativeLayout(RelativeLayout.Y_AXIS));
 		
 		JLabel la = new JLabel("Area:   ");
-		la.setHorizontalAlignment(SwingConstants.RIGHT);
+		la.setVerticalAlignment(SwingConstants.TOP);
 		addBtnContainer.add(la, new Float(1));
 		
 		areaOptions = new JComboBox(new String[] {Constants.REGION_ASIA_AFRICA, Constants.REGION_EUROPE_AMERICA, Constants.REGION_BOTH});
@@ -243,7 +244,7 @@ public class TransactionPanel extends JPanel{
 		addBtnContainer.add(areaOptions, new Float(1.5));
 		
 		JLabel lab = new JLabel("Abort or Commit:   ");
-		lab.setHorizontalAlignment(SwingConstants.RIGHT);
+		lab.setVerticalAlignment(SwingConstants.BOTTOM);
 		addBtnContainer.add(lab, new Float(2));
 		
 		acOptions = new JComboBox(new String[] {"Abort", "Commit"});
