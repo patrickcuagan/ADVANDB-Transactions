@@ -29,7 +29,7 @@ public class Constants {
 	public static final String EAQUERY_TITLE6 = "EUROPE_AMERICA DELETE POP ABW Year 2001";
 	public static final String EAQUERY_TITLE7 = "EUROPE_AMERICA DELETE POP ABW Year 2002";
 	
-	public static final String BQUERY_1 = "SELECT countrycode, yearc, data FROM databyyear WHERE seriescode = 'SM.POP.TOTL' AND yearc LIKE '200%' AND  countrycode='ABW' ";
+	public static final String BQUERY_1 = "SELECT countrycode, yearc, data FROM databyyear WHERE seriescode = 'SM.POP.TOTL' AND yearc LIKE '200%' AND  (countrycode='ABW' OR countrycode='AFG')  ";
 	public static final String BQUERY_2 = "UPDATE `databyyear` SET data = data + 10 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_3 = "UPDATE `databyyear` SET data = data + 20 WHERE `seriescode`='SM.POP.TOTL' AND `yearc`='2000 [YR2000]' AND `countrycode`='ABW';";
 	public static final String BQUERY_4 = "insert into databyyear(countrycode, seriescode, yearc, Data) select 'ABW','SM.POP.TOTL','2001 [YR2001]',5000 FROM country WHERE countrycode = 'ABW';";
